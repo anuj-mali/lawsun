@@ -1,0 +1,18 @@
+services:
+  db:
+    image: lawsun_postgres:latest
+    container_name: lawsun_db
+    build:
+      context: ./docker/db
+      dockerfile: Dockerfile
+    environment:
+      POSTGRES_PASSWORD: ${DATABASE__PASSWORD}
+    ports:
+      - "5433:5432"
+    env_file:
+      - ./.env
+    volumes:
+      - lawsun_db:/var/lib/postgresql/data
+
+volumes:
+  lawsun_db:

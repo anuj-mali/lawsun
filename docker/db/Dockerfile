@@ -49,4 +49,7 @@ COPY --from=builder /usr/lib/postgresql/17/lib/ /usr/lib/postgresql/17/lib/
 # Copy all extension metadata (.control, .sql)
 COPY --from=builder /usr/share/postgresql/17/extension/ /usr/share/postgresql/17/extension/
 
+# pg_textsearch must be preloaded before CREATE EXTENSION (see upstream README).
+RUN echo "shared_preload_libraries = 'pg_textsearch'" >> /usr/share/postgresql/17/postgresql.conf.sample
+
 COPY ./init-database.sh /docker-entrypoint-initdb.d/init-database.sh

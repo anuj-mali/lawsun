@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 import uuid
 
 from sqlalchemy.dialects.postgresql import UUID, JSONB
-from sqlalchemy import ForeignKey, Text, Integer, text
+from sqlalchemy import ForeignKey, Text, Integer, text, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from pgvector.sqlalchemy import Vector
@@ -55,6 +55,7 @@ class ChildChunk(Base, UUIDMixin):
     )
 
     content: Mapped[str] = mapped_column(BM25Text, nullable=False)
+    language: Mapped[str] = mapped_column(String(2), nullable=False)
     chunk_index: Mapped[int] = mapped_column(Integer, nullable=False)
     embedding: Mapped[list[float]] = mapped_column(
         Vector(config.embedding_dimensions), nullable=False
@@ -73,19 +74,15 @@ class ChildChunk(Base, UUIDMixin):
             max_alpha=1.2,
         ),
         BM25Index(
-            "ix_child_chunks_content_bm25_ne",
+            "ix_child_chunks_content_bm25_nepali",
             "content",
             text_config="nepali",
-            postgresql_where=text(
-                "document_id IN (SELECT id FROM documents WHERE language = 'ne')"  # nosec B608 — Language.NEPALI
-            ),
+            postgresql_where=text("language = 'ne'"),
         ),
         BM25Index(
-            "ix_child_chunks_content_bm25_en",
+            "ix_child_chunks_content_bm25_english",
             "content",
             text_config="english",
-            postgresql_where=text(
-                "document_id IN (SELECT id FROM documents WHERE language = 'en')"  # nosec B608 — Language.ENGLISH
-            ),
+            postgresql_where=text("language = 'en'"),
         ),
     )

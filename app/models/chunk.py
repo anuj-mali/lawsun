@@ -17,7 +17,7 @@ from app.core.config import config
 from .base import Base, UUIDMixin
 
 if TYPE_CHECKING:
-    from .document import Document, Language
+    from .document import Document
 
 
 class ParentChunk(Base, UUIDMixin):
@@ -31,7 +31,7 @@ class ParentChunk(Base, UUIDMixin):
     content: Mapped[str] = mapped_column(Text, nullable=False)
     chunk_index: Mapped[int] = mapped_column(Integer, nullable=False)
 
-    metadata: Mapped[dict] = mapped_column(JSONB, nullable=False, default=dict)
+    chunk_metadata: Mapped[dict] = mapped_column(JSONB, nullable=False, default=dict)
 
     # Relationships
     document: Mapped[Document] = relationship(
@@ -60,7 +60,7 @@ class ChildChunk(Base, UUIDMixin):
         Vector(config.embedding_dimensions), nullable=False
     )
 
-    metadata: Mapped[dict] = mapped_column(JSONB, nullable=False, default=dict)
+    chunk_metadata: Mapped[dict] = mapped_column(JSONB, nullable=False, default=dict)
 
     parent: Mapped[ParentChunk] = relationship(back_populates="children", lazy="noload")
 
@@ -77,7 +77,7 @@ class ChildChunk(Base, UUIDMixin):
             "content",
             text_config="nepali",
             postgresql_where=text(
-                f"document_id IN (SELECT id FROM documents WHERE language = '{Language.NEPALI}')"  # nosec B608
+                "document_id IN (SELECT id FROM documents WHERE language = 'ne')"  # nosec B608 — Language.NEPALI
             ),
         ),
         BM25Index(
@@ -85,7 +85,7 @@ class ChildChunk(Base, UUIDMixin):
             "content",
             text_config="english",
             postgresql_where=text(
-                f"document_id IN (SELECT id FROM documents WHERE language = '{Language.ENGLISH}')"  # nosec B608
+                "document_id IN (SELECT id FROM documents WHERE language = 'en')"  # nosec B608 — Language.ENGLISH
             ),
         ),
     )

@@ -73,9 +73,11 @@ class Document(Base, UUIDMixin, TimestampMixin):
         back_populates="document", cascade="all, delete-orphan", lazy="noload"
     )
 
-    __table_args__ = UniqueConstraint(
-        "file_hash",
-        name="uq_file_hash",
+    __table_args__ = (
+        UniqueConstraint(
+            "file_hash",
+            name="uq_file_hash",
+        ),
     )
 
     def __repr__(self) -> str:

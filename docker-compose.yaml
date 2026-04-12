@@ -14,5 +14,13 @@ services:
     volumes:
       - lawsun_db:/var/lib/postgresql/data
 
+  redis:
+    image: redis:latest
+    container_name: lawsun_redis
+    ports:
+      - "6379:6379"
+    env_file:
+      - ./.env
+
 volumes:
   lawsun_db:

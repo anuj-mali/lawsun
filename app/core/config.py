@@ -29,6 +29,12 @@ class DatabaseConfig(BaseModel):
         return f"postgresql+asyncpg://{self.user}:{self.password}@{self.host}:{self.port}/{self.name}"
 
 
+class RedisConfig(BaseModel):
+    host: str
+    port: int
+    db: int
+
+
 class Config(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=".env",
@@ -42,6 +48,9 @@ class Config(BaseSettings):
 
     # DATABASE
     database: DatabaseConfig
+
+    # REDIS
+    redis: RedisConfig
 
     # EMBEDDING
     embedding_dimensions: int = 768

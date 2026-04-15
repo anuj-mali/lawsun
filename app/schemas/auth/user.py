@@ -42,9 +42,7 @@ class UserResponse(AppSchema):
 
 class UserListResponse(AppSchema):
     items: list[UserResponse]
-    total: int
-    page: int
-    page_size: int
+    next_cursor: uuid.UUID | None
 
 
 # Password

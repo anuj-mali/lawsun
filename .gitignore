@@ -14,3 +14,6 @@ wheels/
 
 # Cache files
 .ruff_cache
+
+# IDE files
+.codex

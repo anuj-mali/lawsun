@@ -33,7 +33,7 @@ class Conversation(Base, UUIDMixin, TimestampMixin):
         JSONB, nullable=True, default=None
     )
 
-    user: Mapped[User] = relationship(back_populates="conversations", lazy="noload")
+    user: Mapped[User] = relationship(lazy="noload")
 
     messages: Mapped[list[Message]] = relationship(
         back_populates="conversation",

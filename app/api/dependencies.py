@@ -8,13 +8,17 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
-from app.core.exceptions import AccountDisabledError, PermissionError, UserNotFoundError
 from app.db.session import get_db
 from app.db.redis import get_redis
 
-from app.models.user import User, UserRole
+from app.core.exceptions import (
+    AccountDisabledError,
+    PermissionError,
+    UserNotFoundError,
+)
 
 from app.services.auth import AuthService
+from app.models.user import User, UserRole
 from app.repositories import UserRepository, TokenRepository
 
 bearer_scheme = HTTPBearer()

@@ -73,9 +73,9 @@ class AuthService:
         return uuid.UUID(payload["sub"])
 
     async def login(self, email: str, password: str) -> LoginResponse:
-        user = self.user_repo.get_by_email(email)
+        user = await self.user_repo.get_by_email(email)
 
-        if not user or not self.verify_password(password, user.password):
+        if not user or not self.verify_password(password, user.hashed_password):
             raise InvalidCredentialsError()
 
         if not user.is_active:
@@ -94,7 +94,7 @@ class AuthService:
         if not user_id:
             raise InvalidTokenError("Invalid or expired refresh token")
 
-        user = self.user_repo.get_by_id(user_id)
+        user = await self.user_repo.get_by_id(user_id)
 
         if not user:
             raise UserNotFoundError()
@@ -125,8 +125,8 @@ class AuthService:
         )
 
     # Password reset
-    async def request_password_reset(self, email: str) -> None:
-        user = self.user_repo.get_by_email(email)
+    async def request_password_reset(self, email: str) -> str:
+        user = await self.user_repo.get_by_email(email)
         if not user:
             raise UserNotFoundError()
 
@@ -146,7 +146,7 @@ class AuthService:
         if not user_id:
             raise InvalidTokenError("Invalid or expired reset token")
 
-        user = self.user_repo.get_by_id(user_id)
+        user = await self.user_repo.get_by_id(user_id)
 
         if not user:
             raise UserNotFoundError()

@@ -58,7 +58,7 @@ class ChildChunk(Base, UUIDMixin):
     language: Mapped[str] = mapped_column(String(2), nullable=False)
     chunk_index: Mapped[int] = mapped_column(Integer, nullable=False)
     embedding: Mapped[list[float]] = mapped_column(
-        Vector(config.embedding_dimensions), nullable=False
+        Vector(config.embedding.dimensions), nullable=False
     )
 
     chunk_metadata: Mapped[dict] = mapped_column(JSONB, nullable=False, default=dict)

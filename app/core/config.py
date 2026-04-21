@@ -11,6 +11,11 @@ class LLMConfig(BaseModel):
     model_name: str
 
 
+class EmbeddingConfig(BaseModel):
+    model_name: str
+    dimensions: int
+
+
 class DatabaseConfig(BaseModel):
     host: str
     port: int
@@ -35,6 +40,13 @@ class RedisConfig(BaseModel):
     db: int
 
 
+class AuthConfig(BaseModel):
+    secret_key: str
+    algorithm: str
+    access_token_expire_minutes: int
+    refresh_token_expire_days: int
+
+
 class Config(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=".env",
@@ -53,8 +65,13 @@ class Config(BaseSettings):
     redis: RedisConfig
 
     # EMBEDDING
-    embedding_dimensions: int = 768
+    embedding: EmbeddingConfig
+
+    # LLM
     llm: LLMConfig
+
+    # AUTH
+    auth: AuthConfig
 
 
 config = Config()

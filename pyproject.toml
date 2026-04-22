@@ -1,0 +1,38 @@
+[project]
+name = "lawsun"
+version = "0.1.0"
+description = "A RAG app for Laws and Acts"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "aiofiles>=25.1.0",
+    "alembic>=1.18.4",
+    "asyncpg>=0.31.0",
+    "celery[redis]>=5.6.3",
+    "fastapi[standard]>=0.135.3",
+    "flower>=2.0.1",
+    "google-genai>=1.70.0",
+    "httpx>=0.28.1",
+    "langgraph>=1.1.4",
+    "lingua-language-detector>=2.2.0",
+    "passlib[bcrypt]>=1.7.4",
+    "pdfplumber>=0.11.9",
+    "pgvector>=0.4.2",
+    "pre-commit>=4.5.1",
+    "pydantic-settings>=2.13.1",
+    "pyjwt>=2.12.1",
+    "pymupdf>=1.27.2.2",
+    "python-multipart>=0.0.22",
+    "redis[hiredis]>=6.4.0",
+    "sqladmin>=0.24.0",
+    "sqlalchemy[asyncio]>=2.0.48",
+    "structlog>=25.5.0",
+    "tenacity>=9.1.4",
+    "uvicorn[standard]>=0.42.0",
+]
+
+[dependency-groups]
+dev = [
+    "mypy>=1.20.0",
+    "ruff>=0.15.8",
+]

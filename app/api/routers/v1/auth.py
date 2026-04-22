@@ -77,7 +77,7 @@ async def refresh(
 async def logout(
     payload: RefreshTokenRequest,
     auth_service: Annotated[AuthService, Depends(get_auth_service)],
-) -> None:
+) -> MessageResponse:
     await auth_service.logout(payload.refresh_token)
     return MessageResponse(message="Logged out successfully.")
 
@@ -109,7 +109,7 @@ async def confirm_password_reset(
     return MessageResponse(message="Password has been reset successfully.")
 
 
-@router.post("/me/password", ResponseModel=MessageResponse)
+@router.post("/me/password", response_model=MessageResponse)
 async def change_password(
     payload: PasswordChange,
     user: CurrentUser,

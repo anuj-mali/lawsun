@@ -1,11 +1,11 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
-from app.api.routers.auth import router as auth_router
+from app.api.routers.v1 import router as v1_router
 from app.core.exceptions import AppError
 
 app = FastAPI()
-app.include_router(auth_router)
+app.include_router(v1_router)
 
 
 @app.exception_handler(AppError)

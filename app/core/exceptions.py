@@ -52,6 +52,10 @@ class AccountDisabledError(PermissionError):
     message = " This account has been disabled"
 
 
+class SelfDeactivationError(PermissionError):
+    message = "You cannot deactivate your own account"
+
+
 # 404 Not Found
 class NotFoundError(AppError):
     status_code = 404

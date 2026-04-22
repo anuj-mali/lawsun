@@ -14,10 +14,12 @@ from app.schemas.auth import (
     MessageResponse,
 )
 
+from app.models.user import UserRole
 from app.core.exceptions import (
     DuplicateEmailError,
     UserNotFoundError,
     SelfDeactivationError,
+    PermissionError,
 )
 
 from app.api.dependencies import (
@@ -39,10 +41,16 @@ router = APIRouter(prefix="/users", tags=["users"])
 )
 async def create_user(
     payload: UserCreate,
-    _: CurrentAdmin,
+    current_admin: CurrentAdmin,
     auth_service: Annotated[AuthService, Depends(get_auth_service)],
     user_repo: Annotated[UserRepository, Depends(get_user_repo)],
 ) -> UserResponse:
+    if payload.role in (UserRole.SUPERUSER, UserRole.ADMIN):
+        if current_admin.role != UserRole.SUPERUSER:
+            raise PermissionError(
+                "Superuser access required to create privileged users"
+            )
+
     existing_user = await user_repo.get_by_email(payload.email)
     if existing_user is not None:
         raise DuplicateEmailError()
@@ -129,5 +137,10 @@ async def deactivate_user(
     user = await user_repo.get_by_id(user_id)
     if user is None:
         raise UserNotFoundError()
+
+    if user.role in (UserRole.ADMIN, UserRole.SUPERUSER):
+        if current_admin.role != UserRole.SUPERUSER:
+            raise PermissionError("Only superusers can deactivate privileged users")
+
     user = await user_repo.deactivate(user)
     return MessageResponse(message="User deactivated successfully.")

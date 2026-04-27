@@ -72,8 +72,8 @@ async def get_users(
     _: CurrentAdmin,
     user_repo: Annotated[UserRepository, Depends(get_user_repo)],
     page_size: Annotated[int, Query(ge=1, le=100)] = 20,
-    is_active: Annotated[bool | None, Query(default=None)] = None,
-    cursor: Annotated[uuid.UUID | None, Query(default=None)] = None,
+    is_active: Annotated[bool | None, Query()] = None,
+    cursor: Annotated[uuid.UUID | None, Query()] = None,
 ) -> UserListResponse:
     users, next_cursor = await user_repo.get_all(
         page_size=page_size, cursor=cursor, is_active=is_active

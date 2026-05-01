@@ -25,11 +25,6 @@ class DatabaseConfig(BaseModel):
 
     @computed_field
     @property
-    def database_url(self) -> str:
-        return f"postgresql+psycopg2://{self.user}:{self.password}@{self.host}:{self.port}/{self.name}"
-
-    @computed_field
-    @property
     def database_url_async(self) -> str:
         return f"postgresql+asyncpg://{self.user}:{self.password}@{self.host}:{self.port}/{self.name}"
 

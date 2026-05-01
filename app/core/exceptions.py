@@ -31,7 +31,7 @@ class AuthenticationError(AppError):
 
 
 class InvalidCredentialsError(AuthenticationError):
-    message = " Invalid email or password"
+    message = "Invalid email or password"
 
 
 class TokenExpiredError(AuthenticationError):
@@ -49,7 +49,7 @@ class PermissionError(AppError):
 
 
 class AccountDisabledError(PermissionError):
-    message = " This account has been disabled"
+    message = "This account has been disabled"
 
 
 class SelfDeactivationError(PermissionError):

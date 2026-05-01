@@ -49,7 +49,7 @@ def get_auth_service(
 def get_ministry_service(
     ministry_repo: Annotated[MinistryRepository, Depends(get_ministry_repo)],
 ) -> MinistryService:
-    return MinistryService(ministry_repo=ministry_repo)
+    return MinistryService(repo=ministry_repo)
 
 
 async def get_current_user(

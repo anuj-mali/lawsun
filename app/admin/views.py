@@ -1,9 +1,10 @@
 from __future__ import annotations
 
 from sqladmin import ModelView
+from sqladmin.filters import BooleanFilter, OperationColumnFilter, StaticValuesFilter
 
-from app.models.user import User
-from app.models.document import Document
+from app.models.user import User, UserRole
+from app.models.document import Document, DocumentCategory, DocumentStatus, Language
 from app.models.legal_body import Ministry
 from app.models.chunk import ParentChunk, ChildChunk
 from app.models.conversation import Conversation, Message
@@ -40,12 +41,15 @@ class UserAdmin(ModelView, model=User):
     ]
 
     column_filters = [
-        User.role,
-        User.is_active,
+        StaticValuesFilter(
+            User.role,
+            values=[(role.value, role.value) for role in UserRole],
+        ),
+        BooleanFilter(User.is_active),
     ]
 
     form_excluded_columns = [User.hashed_password]
-    column_details_list = [User.hashed_password]
+    column_details_exclude_list = [User.hashed_password]
 
     can_create = False
     can_delete = False
@@ -74,14 +78,9 @@ class MinistryAdmin(ModelView, model=Ministry):
         Ministry.is_active,
         Ministry.created_at,
     ]
-    column_sortable_list = [
-        Ministry.name,
-        Ministry.is_active,
-        Ministry.created_at,
-    ]
 
     column_filters = [
-        Ministry.is_active,
+        BooleanFilter(Ministry.is_active),
     ]
 
 
@@ -101,7 +100,7 @@ class DocumentAdmin(ModelView, model=Document):
         Document.created_at,
     ]
 
-    column_searchable_list = [Document.title, Document.category, Document.source_url]
+    column_searchable_list = [Document.title, Document.source_url]
 
     column_sortable_list = [
         Document.title,
@@ -113,9 +112,18 @@ class DocumentAdmin(ModelView, model=Document):
     ]
 
     column_filters = [
-        Document.category,
-        Document.language,
-        Document.status,
+        StaticValuesFilter(
+            Document.category,
+            values=[(category.value, category.value) for category in DocumentCategory],
+        ),
+        StaticValuesFilter(
+            Document.language,
+            values=[(language.value, language.value) for language in Language],
+        ),
+        StaticValuesFilter(
+            Document.status,
+            values=[(status.value, status.value) for status in DocumentStatus],
+        ),
     ]
     can_create = False
     can_delete = True
@@ -139,7 +147,7 @@ class ParentChunkAdmin(ModelView, model=ParentChunk):
     ]
 
     column_filters = [
-        ParentChunk.document_id,
+        OperationColumnFilter(ParentChunk.document_id),
     ]
 
     column_details_list = [
@@ -207,7 +215,7 @@ class ConversationAdmin(ModelView, model=Conversation):
     ]
 
     can_create = False
-    can_delete = False
+    can_edit = False
 
 
 class MessageAdmin(ModelView, model=Message):

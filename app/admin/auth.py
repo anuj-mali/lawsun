@@ -17,7 +17,7 @@ from app.core.exceptions import AppError
 class AdminAuthBackend(AuthenticationBackend):
     async def login(self, request: Request) -> bool:
         form = await request.form()
-        email = form.get("email")
+        email = form.get("username")
         password = form.get("password")
 
         if not email or not password:

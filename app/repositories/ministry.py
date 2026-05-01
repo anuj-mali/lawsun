@@ -13,8 +13,8 @@ class MinistryRepository:
     def __init__(self, db: AsyncSession):
         self.db = db
 
-    async def get_by_id(self, id: uuid.UUID) -> Ministry | None:
-        return await self.db.get(Ministry, id)
+    async def get_by_id(self, ministry_id: uuid.UUID) -> Ministry | None:
+        return await self.db.get(Ministry, ministry_id)
 
     async def get_by_name(self, name: str) -> Ministry | None:
         result = await self.db.execute(select(Ministry).where(Ministry.name == name))

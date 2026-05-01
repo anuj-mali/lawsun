@@ -18,8 +18,9 @@ from app.core.exceptions import (
 )
 
 from app.services.auth import AuthService
+from app.services.ministry import MinistryService
 from app.models.user import User, UserRole
-from app.repositories import UserRepository, TokenRepository
+from app.repositories import UserRepository, TokenRepository, MinistryRepository
 
 bearer_scheme = HTTPBearer()
 
@@ -32,11 +33,23 @@ def get_token_repo(redis: Annotated[Redis, Depends(get_redis)]) -> TokenReposito
     return TokenRepository(redis)
 
 
+def get_ministry_repo(
+    db: Annotated[AsyncSession, Depends(get_db)],
+) -> MinistryRepository:
+    return MinistryRepository(db)
+
+
 def get_auth_service(
     user_repo: Annotated[UserRepository, Depends(get_user_repo)],
     token_repo: Annotated[TokenRepository, Depends(get_token_repo)],
 ) -> AuthService:
     return AuthService(user_repo=user_repo, token_repo=token_repo)
+
+
+def get_ministry_service(
+    ministry_repo: Annotated[MinistryRepository, Depends(get_ministry_repo)],
+) -> MinistryService:
+    return MinistryService(repo=ministry_repo)
 
 
 async def get_current_user(

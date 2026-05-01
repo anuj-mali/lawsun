@@ -7,6 +7,7 @@ from pydantic import AnyHttpUrl, Field
 from app.models.document import DocumentCategory, DocumentStatus, Language
 
 from .base import AppSchema
+from .ministry import MinistryResponse
 
 
 class DocumentCreate(AppSchema):
@@ -30,12 +31,6 @@ class DocumentUpdate(AppSchema):
 
 class DocumentReingest(AppSchema):
     force: bool = False
-
-
-class MinistryResponse(AppSchema):
-    id: uuid.UUID
-    name: str
-    short_name: str | None
 
 
 class DocumentResponse(AppSchema):

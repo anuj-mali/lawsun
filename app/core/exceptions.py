@@ -31,7 +31,7 @@ class AuthenticationError(AppError):
 
 
 class InvalidCredentialsError(AuthenticationError):
-    message = " Invalid email or password"
+    message = "Invalid email or password"
 
 
 class TokenExpiredError(AuthenticationError):
@@ -49,7 +49,7 @@ class PermissionError(AppError):
 
 
 class AccountDisabledError(PermissionError):
-    message = " This account has been disabled"
+    message = "This account has been disabled"
 
 
 class SelfDeactivationError(PermissionError):
@@ -74,6 +74,10 @@ class ConversationNotFoundError(NotFoundError):
     message = "Conversation not found"
 
 
+class MinistryNotFoundError(NotFoundError):
+    message = "Ministry not found"
+
+
 # 409 Conflict
 class ConflictError(AppError):
     status_code = 409
@@ -86,6 +90,10 @@ class DuplicateEmailError(ConflictError):
 
 class DuplicateDocumentError(ConflictError):
     message = "This document has already been ingested"
+
+
+class DuplicateMinistryError(ConflictError):
+    message = "A ministry with this name already exists"
 
 
 # 422 Unprocessable Entity

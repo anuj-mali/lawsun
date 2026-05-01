@@ -1,10 +1,33 @@
+from __future__ import annotations
+
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
+
+from app.db.session import engine
 
 from app.api.routers.v1 import router as v1_router
 from app.core.exceptions import AppError
 
-app = FastAPI()
+from app.core.config import config
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    yield
+    await engine.dispose()
+
+
+app = FastAPI(
+    title="Lawsun",
+    debug=config.debug,
+    lifespan=lifespan,
+    docs_url="/docs" if config.debug else None,
+    redoc_url="/redoc" if config.debug else None,
+)
+
+
 app.include_router(v1_router)
 
 

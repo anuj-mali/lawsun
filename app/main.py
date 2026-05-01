@@ -12,6 +12,11 @@ from app.core.exceptions import AppError
 
 from app.core.config import config
 
+from app.admin import setup_admin
+
+
+from starlette.middleware.sessions import SessionMiddleware
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -29,6 +34,10 @@ app = FastAPI(
 
 
 app.include_router(v1_router)
+
+app.add_middleware(SessionMiddleware, secret_key=config.auth.secret_key)
+
+setup_admin(app)
 
 
 @app.exception_handler(AppError)

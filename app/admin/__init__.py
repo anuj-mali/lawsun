@@ -25,7 +25,6 @@ def setup_admin(app: FastAPI) -> None:
         engine=engine,
         title="Lawsun Admin",
         base_url="/admin",
-        sidebar_ui_dark_mode=True,
         authentication_backend=AdminAuthBackend(secret_key=config.auth.secret_key),
     )
 

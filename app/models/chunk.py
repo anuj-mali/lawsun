@@ -14,13 +14,13 @@ from app.db.index import DiskANNIndex, BM25Index
 
 from app.core.config import config
 
-from .base import Base, UUIDMixin
+from .base import Base, UUIDMixin, TimestampMixin
 
 if TYPE_CHECKING:
     from .document import Document
 
 
-class ParentChunk(Base, UUIDMixin):
+class ParentChunk(Base, UUIDMixin, TimestampMixin):
     __tablename__ = "parent_chunks"
     document_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True),

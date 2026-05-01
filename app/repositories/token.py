@@ -39,6 +39,10 @@ class TokenRepository:
             _user_tokens_key(user_id),
             token,
         )
+        pipe.expire(
+            _user_tokens_key(user_id),
+            ttl_seconds,
+        )
         await pipe.execute()
 
     async def get_user_id_for_refresh_token(self, token: str) -> uuid.UUID | None:

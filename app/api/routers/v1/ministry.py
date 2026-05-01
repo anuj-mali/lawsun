@@ -21,7 +21,7 @@ from app.api.dependencies import (
 )
 from app.services.ministry import MinistryService
 
-router = APIRouter(prefix="/ministry", tags=["ministry"])
+router = APIRouter(prefix="/ministries", tags=["ministries"])
 
 
 @router.get("/", response_model=MinistryListResponse)

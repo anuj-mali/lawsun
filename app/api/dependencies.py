@@ -13,12 +13,13 @@ from app.db.redis import get_redis
 
 from app.core.exceptions import (
     AccountDisabledError,
-    PermissionError,
+    ForbiddenError,
     UserNotFoundError,
 )
 
 from app.services.auth import AuthService
 from app.services.ministry import MinistryService
+from app.services.user import UserService
 from app.models.user import User, UserRole
 from app.repositories import UserRepository, TokenRepository, MinistryRepository
 
@@ -44,6 +45,12 @@ def get_auth_service(
     token_repo: Annotated[TokenRepository, Depends(get_token_repo)],
 ) -> AuthService:
     return AuthService(user_repo=user_repo, token_repo=token_repo)
+
+
+def get_user_service(
+    user_repo: Annotated[UserRepository, Depends(get_user_repo)],
+) -> UserService:
+    return UserService(repo=user_repo)
 
 
 def get_ministry_service(
@@ -74,7 +81,7 @@ async def get_current_admin(
     current_user: Annotated[User, Depends(get_current_user)],
 ) -> User:
     if current_user.role not in (UserRole.ADMIN, UserRole.SUPERUSER):
-        raise PermissionError("Admin access required")
+        raise ForbiddenError("Admin access required")
     return current_user
 
 
@@ -82,7 +89,7 @@ async def get_current_superuser(
     current_user: Annotated[User, Depends(get_current_user)],
 ) -> User:
     if current_user.role != UserRole.SUPERUSER:
-        raise PermissionError("Superuser access required")
+        raise ForbiddenError("Superuser access required")
     return current_user
 
 

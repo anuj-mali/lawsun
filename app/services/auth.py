@@ -61,6 +61,9 @@ class AuthService:
                 token,
                 config.auth.secret_key,
                 algorithms=[config.auth.algorithm],
+                options={
+                    "require": ["type", "sub", "exp"],
+                },
             )
         except jwt.ExpiredSignatureError:
             raise TokenExpiredError()
@@ -70,7 +73,10 @@ class AuthService:
         if payload["type"] != "access":
             raise InvalidTokenError("Invalid token type")
 
-        return uuid.UUID(payload["sub"])
+        try:
+            return uuid.UUID(str(payload["sub"]))
+        except ValueError:
+            raise InvalidTokenError()
 
     async def login(self, email: str, password: str) -> LoginResponse:
         user = await self.user_repo.get_by_email(email)

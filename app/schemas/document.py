@@ -16,8 +16,8 @@ class DocumentCreate(AppSchema):
     category: DocumentCategory
     language: Language = Language.NEPALI
     ministry_id: uuid.UUID | None = None
-    domain: str | None = Field(min_length=1, max_length=100)
-    year: int | None = Field(ge=1900, le=2100)
+    domain: str | None = Field(min_length=1, max_length=100, default=None)
+    year: int | None = Field(ge=1900, le=2100, default=None)
 
 
 class DocumentUpdate(AppSchema):
@@ -25,8 +25,8 @@ class DocumentUpdate(AppSchema):
     category: DocumentCategory | None = None
     language: Language | None = None
     ministry_id: uuid.UUID | None = None
-    domain: str | None = Field(default=None, min_length=1, max_length=100)
-    year: int | None = Field(default=None, ge=1900, le=2100)
+    domain: str | None = Field(min_length=1, max_length=100, default=None)
+    year: int | None = Field(ge=1900, le=2100, default=None)
 
 
 class DocumentReingest(AppSchema):

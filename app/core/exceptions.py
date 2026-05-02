@@ -43,16 +43,16 @@ class InvalidTokenError(AuthenticationError):
 
 
 # 403 Forbidden
-class PermissionError(AppError):
+class ForbiddenError(AppError):
     status_code = 403
     message = "You do not have permission to perform this action"
 
 
-class AccountDisabledError(PermissionError):
+class AccountDisabledError(ForbiddenError):
     message = "This account has been disabled"
 
 
-class SelfDeactivationError(PermissionError):
+class SelfDeactivationError(ForbiddenError):
     message = "You cannot deactivate your own account"
 
 
